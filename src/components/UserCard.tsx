@@ -29,12 +29,20 @@ export default function UserCard({ user }: { user: User }) {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [showAllPosts, setShowAllPosts] = useState(false);
   const [copied, setCopied] = useState(false);
+  // ESTADO MAPA
+  const [mapLoading, setMapLoading] = useState(true);
 
   const handleCopy = () => {
     if (!user.extension) return;
     navigator.clipboard.writeText(user.extension);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleToggleInfo = () => {
+    // CONDICIÓN MAPA
+    if (!showMoreInfo) setMapLoading(true);
+    setShowMoreInfo(!showMoreInfo);
   };
 
   const visiblePosts = showAllPosts
@@ -147,7 +155,7 @@ export default function UserCard({ user }: { user: User }) {
 
         {/* BOTÓN MOSTRAR MÁS INFO */}
         <button
-          onClick={() => setShowMoreInfo(!showMoreInfo)}
+          onClick={handleToggleInfo}
           aria-expanded={showMoreInfo}
           className="text-sm font-semibold text-amber-50 hover:text-white underline decoration-2 underline-offset-4"
         >
@@ -186,13 +194,46 @@ export default function UserCard({ user }: { user: User }) {
                 </strong>{" "}
                 {user.street} {user.suite}, {user.zip}
               </p>
+
               {/* MAPA OPENSTREETMAP */}
               {user.geo && user.geo.lat && user.geo.lng && (
-                <div className="h-48 w-full rounded-lg overflow-hidden border border-gray-300 shadow-inner relative z-0">
+                <div className="h-48 w-full rounded-lg overflow-hidden border border-gray-300 shadow-inner relative z-0 bg-gray-200">
+                  {/* OVERLAY DE CARGA */}
+                  {mapLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10 transition-opacity">
+                      <div className="flex items-center gap-2 text-gray-500 animate-pulse">
+                        <svg
+                          className="animate-spin h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        <span className="font-medium text-sm">
+                          Cargando mapa...
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
                   <iframe
                     title={`Mapa de ${user.name}`}
                     className="w-full h-full border-0"
                     loading="lazy"
+                    onLoad={() => setMapLoading(false)}
                     src={`https://www.openstreetmap.org/export/embed.html?bbox=${
                       parseFloat(user.geo.lng) - 0.05
                     }%2C${parseFloat(user.geo.lat) - 0.05}%2C${
@@ -225,7 +266,7 @@ export default function UserCard({ user }: { user: User }) {
               </h4>
               <p className="text-gray-500 text-xs mt-1">{post.body}</p>
               <div className="text-right mt-1">
-                <small className="text-gray-300 text-xs">#{post.id}</small>
+                <small className="text-gray-300 text-xs mr-1">#{post.id}</small>
               </div>
             </li>
           ))}
