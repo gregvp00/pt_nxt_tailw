@@ -25,6 +25,7 @@ interface User {
   userPosts: Post[];
 }
 
+// USO DE USESTATE PARA COPIAR MÁS INFO, TODOS LOS POSTS Y COPIAR EXTENSIÓN
 export default function UserCard({ user }: { user: User }) {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [showAllPosts, setShowAllPosts] = useState(false);
@@ -37,6 +38,7 @@ export default function UserCard({ user }: { user: User }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // LÓGICA 3 POSTS
   const visiblePosts = showAllPosts
     ? user.userPosts
     : user.userPosts.slice(0, 3);
@@ -45,7 +47,6 @@ export default function UserCard({ user }: { user: User }) {
   return (
     <article className="flex flex-col h-full bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
       <div className="p-6 grow">
-        {/* Cabecera y datos principales */}
         <header className="mb-4">
           <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
           <p className="text-indigo-600 font-medium text-sm">
@@ -74,7 +75,7 @@ export default function UserCard({ user }: { user: User }) {
                 {user.phone}
               </a>
             </div>
-
+            {/* BOTÓN COPIAR EXTENSIÓN */}
             {user.extension && (
               <button
                 onClick={handleCopy}
@@ -123,7 +124,6 @@ export default function UserCard({ user }: { user: User }) {
           </p>
         </div>
 
-        {/* Botón mostrar más información (Usuario, Web, Dirección y Mapa) */}
         <button
           onClick={() => setShowMoreInfo(!showMoreInfo)}
           aria-expanded={showMoreInfo}
@@ -157,7 +157,6 @@ export default function UserCard({ user }: { user: User }) {
               </a>
             </p>
 
-            {/* Dirección y Mapa Moderno (sin atributos deprecated) */}
             <div className="pt-3 border-t border-gray-200">
               <p className="text-sm mb-2">
                 <strong className="font-semibold text-gray-900">
@@ -165,7 +164,7 @@ export default function UserCard({ user }: { user: User }) {
                 </strong>{" "}
                 {user.street} {user.suite}, {user.zip}
               </p>
-
+              {/* MAPA OPENSTREETMAP */}
               {user.geo && user.geo.lat && user.geo.lng && (
                 <div className="h-48 w-full rounded-lg overflow-hidden border border-gray-300 shadow-inner relative z-0">
                   <iframe
@@ -186,7 +185,6 @@ export default function UserCard({ user }: { user: User }) {
           </div>
         )}
 
-        {/* Sección de Posts */}
         <div className="pt-4 border-t border-gray-100">
           <h3 className="text-lg font-bold text-gray-900 mb-4">
             Últimos Posts
@@ -211,7 +209,7 @@ export default function UserCard({ user }: { user: User }) {
             ))}
           </ul>
 
-          {/* Botón para ver más posts si hay más de 3 */}
+          {/* BOTÓN >3 POSTS */}
           {user.userPosts.length > 3 && (
             <button
               onClick={() => setShowAllPosts(!showAllPosts)}

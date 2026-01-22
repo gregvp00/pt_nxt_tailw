@@ -9,11 +9,12 @@ export default function Home() {
   const [showError, setShowError] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   const handleLoadData = () => {
     setShowError(false);
     startTransition(async () => {
       const result = await getCombinedData();
-
       if (result.success) {
         setData(result.data);
         setHasLoaded(true);
@@ -23,9 +24,19 @@ export default function Home() {
     });
   };
 
+  // FILTRO (Nombre, Email o Ciudad)
+  const filteredData = data.filter((user) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      user.name.toLowerCase().includes(term) ||
+      user.email.toLowerCase().includes(term) ||
+      user.city.toLowerCase().includes(term)
+    );
+  });
+
   return (
     <main className="p-4 sm:p-8 max-w-7xl mx-auto relative min-h-screen">
-      {/* Fallback */}
+      {/* FALLBACK */}
       {showError && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center">
@@ -41,11 +52,11 @@ export default function Home() {
                 onClick={handleLoadData}
                 className="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors"
               >
-                Reintentar ahora
+                Reintentar
               </button>
               <button
                 onClick={() => setShowError(false)}
-                className="w-full py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200"
+                className="w-full py-3 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300"
               >
                 Cerrar
               </button>
@@ -54,7 +65,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="flex justify-center mb-10">
+      <div className="flex flex-col items-center gap-6 mb-10">
         <button
           onClick={handleLoadData}
           disabled={isPending}
@@ -66,12 +77,44 @@ export default function Home() {
               ? "Volver a cargar datos"
               : "Cargar datos"}
         </button>
+
+        {/* INPUT BÚSQUEDA */}
+        {hasLoaded && (
+          <div className="w-full max-w-md relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="Búsqueda rápida"
+              className="text-black block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm transition-shadow"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-        {data.map((user) => (
-          <UserCard key={user.id} user={user} />
-        ))}
+        {/* FALLBACK BÚSQUEDA */}
+        {filteredData.length > 0
+          ? filteredData.map((user) => <UserCard key={user.id} user={user} />)
+          : hasLoaded && (
+              <div className="col-span-full text-center text-gray-500 py-10">
+                No se encontraron resultados para "{searchTerm}"
+              </div>
+            )}
       </div>
     </main>
   );
