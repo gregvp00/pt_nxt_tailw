@@ -28,6 +28,7 @@ export async function getCombinedData() {
     const postsMap = rawPosts.reduce((acc: any, post: any) => {
       if (!acc[post.userId]) acc[post.userId] = [];
       acc[post.userId].push({
+        id: post.id,
         title: post.title || "Sin título",
         body: post.body || "",
       });
@@ -36,18 +37,29 @@ export async function getCombinedData() {
 
     return {
       success: true,
-      data: rawUsers.map((user: any) => ({
-        id: user.id,
-        name: user.name || "N/A",
-        email: user.email || "N/A",
-        phone: user.phone || "N/A",
-        username: user.username || "N/A",
-        website: user.website || "N/A",
-        city: user.address && user.address.city ? user.address.city : "N/A",
-        companyName:
-          user.company && user.company.name ? user.company.name : "N/A",
-        userPosts: postsMap[user.id] || [],
-      })),
+      data: rawUsers.map((user: any) => {
+        const [basePhone, ext] = (user.phone || "").split(" x");
+
+        return {
+          id: user.id,
+          name: user.name || "N/A",
+          email: user.email || "N/A",
+          phone: basePhone ? basePhone.trim() : "N/A",
+          extension: ext ? ext.trim() : "",
+          username: user.username || "N/A",
+          website: user.website || "N/A",
+          city: user.address?.city || "N/A",
+          companyName: user.company?.name || "N/A",
+          userPosts: postsMap[user.id] || [],
+          street: user.address?.street || [],
+          suite: user.address?.suite || [],
+          zip: user.address?.zipcode || [],
+          geo: {
+            lat: user.address?.geo?.lat || [],
+            lng: user.address?.geo?.lng || [],
+          },
+        };
+      }),
     };
   } catch (error: any) {
     return {
