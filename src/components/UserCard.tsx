@@ -25,7 +25,6 @@ interface User {
   userPosts: Post[];
 }
 
-// USO DE USESTATE PARA COPIAR MÁS INFO, TODOS LOS POSTS Y COPIAR EXTENSIÓN
 export default function UserCard({ user }: { user: User }) {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [showAllPosts, setShowAllPosts] = useState(false);
@@ -38,15 +37,21 @@ export default function UserCard({ user }: { user: User }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // LÓGICA 3 POSTS
   const visiblePosts = showAllPosts
     ? user.userPosts
     : user.userPosts.slice(0, 3);
   const hiddenPostsCount = user.userPosts.length - 3;
 
+  // ESTILOS BASE TARJETAS
+  const cardClasses =
+    "bg-white border border-gray-200 shadow-md hover:shadow-md transition-shadow overflow-hidden p-6";
+
   return (
-    <article className="flex flex-col h-full bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-      <div className="p-6 grow">
+    <div className="flex flex-col h-full">
+      {/* INFORMACIÓN DEL USUARIO */}
+      <div
+        className={`${cardClasses} rounded-t-lg border-b border-dotted border-gray-300`}
+      >
         <header className="mb-4">
           <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
           <p className="text-indigo-600 font-medium text-sm">
@@ -80,7 +85,9 @@ export default function UserCard({ user }: { user: User }) {
               <button
                 onClick={handleCopy}
                 title="Copiar extensión teléfonica"
-                className="group ml-2 flex items-center gap-1 border border-gray-600 bg-green-50 px-2 py-0.5 font-bold text-gray-800 text-xs hover:bg-green-100 active:scale-95 transition-all rounded"
+                className="group ml-2 flex items-center gap-1 border 
+                border-gray-600 bg-green-50 px-2 py-0.5 font-bold text-gray-800 text-xs 
+                hover:bg-green-100 active:scale-95 transition-all rounded"
               >
                 <span>{user.extension}</span>
                 {copied ? (
@@ -110,7 +117,9 @@ export default function UserCard({ user }: { user: User }) {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+                      d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1
+                      1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2
+                      0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
                     />
                   </svg>
                 )}
@@ -123,17 +132,18 @@ export default function UserCard({ user }: { user: User }) {
             {user.city}
           </p>
         </div>
+
         {/* BOTÓN MOSTRAR MÁS INFO */}
         <button
           onClick={() => setShowMoreInfo(!showMoreInfo)}
           aria-expanded={showMoreInfo}
-          className="mb-4 text-sm font-bold text-gray-800 hover:text-indigo-800 underline decoration-2 underline-offset-4"
+          className="text-sm font-bold text-gray-800 hover:text-indigo-800 underline decoration-2 underline-offset-4"
         >
           {showMoreInfo ? "Ver menos detalles" : "Mostrar más información"}
         </button>
 
         {showMoreInfo && (
-          <div className="p-4 text-gray-700 bg-gray-50 rounded-xl mb-4 border border-gray-100">
+          <div className="mt-4 p-4 text-gray-700 bg-gray-50 rounded-xl border border-gray-100">
             <p className="text-sm">
               <strong className="font-semibold text-gray-900">Usuario:</strong>{" "}
               {user.username}
@@ -184,44 +194,44 @@ export default function UserCard({ user }: { user: User }) {
             </div>
           </div>
         )}
-
-        <div className="pt-4 border-t border-gray-100">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">
-            Últimos Posts
-          </h3>
-
-          <ul className="space-y-4">
-            {visiblePosts.map((post) => (
-              <li
-                key={post.id}
-                className="bg-white border-l-4 border-gray-400 pl-3 py-1"
-              >
-                <h4 className="font-semibold text-gray-800 capitalize leading-snug">
-                  {post.title}
-                </h4>
-
-                <p className="text-gray-500 text-xs mt-1">{post.body}</p>
-
-                <div className="text-right mt-1">
-                  <small className="text-gray-300 text-xs">#{post.id}</small>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          {/* BOTÓN >3 POSTS */}
-          {user.userPosts.length > 3 && (
-            <button
-              onClick={() => setShowAllPosts(!showAllPosts)}
-              className="w-full mt-4 py-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors border border-transparent hover:border-indigo-100"
-            >
-              {showAllPosts
-                ? "Ver menos posts"
-                : `Ver ${hiddenPostsCount} posts más`}
-            </button>
-          )}
-        </div>
       </div>
-    </article>
+
+      {/* POSTS DEL USUARIO */}
+      <div className={cardClasses}>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Últimos Posts</h3>
+
+        <ul className="space-y-4">
+          {visiblePosts.map((post) => (
+            <li
+              key={post.id}
+              className="bg-white border-l-4 border-gray-400 pl-3 py-1"
+            >
+              <h4 className="font-semibold text-gray-800 capitalize leading-snug">
+                {post.title}
+              </h4>
+              <p className="text-gray-500 text-xs mt-1">{post.body}</p>
+              <div className="text-right mt-1">
+                <small className="text-gray-300 text-xs">#{post.id}</small>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {/* BOTÓN >3 POSTS */}
+        {user.userPosts.length > 3 && (
+          <button
+            onClick={() => setShowAllPosts(!showAllPosts)}
+            className="w-full mt-4 py-2 text-sm font-bold 
+            text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 
+            rounded-lg transition-colors border border-transparent 
+            hover:border-indigo-100"
+          >
+            {showAllPosts
+              ? "Ver menos posts"
+              : `Ver ${hiddenPostsCount} posts más`}
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
