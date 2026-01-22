@@ -55,8 +55,8 @@ export async function getCombinedData() {
           suite: user.address?.suite || [],
           zip: user.address?.zipcode || [],
           geo: {
-            lat: user.address?.geo?.lat || [],
-            lng: user.address?.geo?.lng || [],
+            lat: user.address?.geo?.lat || "0",
+            lng: user.address?.geo?.lng || "0",
           },
         };
       }),

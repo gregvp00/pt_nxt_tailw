@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 interface Post {
   id: number;
@@ -42,19 +42,21 @@ export default function UserCard({ user }: { user: User }) {
     : user.userPosts.slice(0, 3);
   const hiddenPostsCount = user.userPosts.length - 3;
   // COLORES ALEATORIOS PARA TARJETAS
-  const colors = [
-    "bg-indigo-400/30 text-indigo-200 border-indigo-400/20",
-    "bg-teal-400/30 text-teal-200 border-teal-400/20",
-    "bg-rose-400/30 text-rose-200 border-rose-400/20",
-    "bg-sky-400/30 text-sky-200 border-sky-400/20",
-    "bg-violet-400/30 text-violet-200 border-violet-400/20",
-    "bg-emerald-400/30 text-emerald-200 border-emerald-400/20",
-  ];
-  const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  const randomColor = useMemo(() => {
+    const colors = [
+      "bg-indigo-400/30 text-indigo-200 border-indigo-400/20",
+      "bg-teal-400/30 text-teal-200 border-teal-400/20",
+      "bg-rose-400/30 text-rose-200 border-rose-400/20",
+      "bg-sky-400/30 text-sky-200 border-sky-400/20",
+      "bg-violet-400/30 text-violet-200 border-violet-400/20",
+      "bg-emerald-400/30 text-emerald-200 border-emerald-400/20",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }, []);
 
   // ESTILOS BASE TARJETAS
   const cardClasses =
-    "bg-[#201d24] shadow-[#302837] shadow-lg transition-shadow overflow-hidden p-6";
+    "bg-[#201d24] shadow-[#302837] shadow-md transition-shadow overflow-hidden p-6";
 
   return (
     <div className="flex flex-col h-full">
@@ -63,7 +65,7 @@ export default function UserCard({ user }: { user: User }) {
         className={`${cardClasses} ${randomColor} rounded-t-lg border-b border-dotted border-gray-300`}
       >
         <header className="mb-4">
-          <h2 className="text-2xl font-bold text-gray-100">{user.name}</h2>
+          <h2 className="text-2xl font-semibold text-gray-50">{user.name}</h2>
           <p className="text-amber-200 font-medium text-sm">
             {user.companyName}
           </p>
