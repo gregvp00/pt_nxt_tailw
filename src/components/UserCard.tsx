@@ -123,11 +123,11 @@ export default function UserCard({ user }: { user: User }) {
             {user.city}
           </p>
         </div>
-
+        {/* BOTÓN MOSTRAR MÁS INFO */}
         <button
           onClick={() => setShowMoreInfo(!showMoreInfo)}
           aria-expanded={showMoreInfo}
-          className="mb-4 text-sm font-bold text-gray-800 hover:text-indigo-600 underline decoration-2 underline-offset-4"
+          className="mb-4 text-sm font-bold text-gray-800 hover:text-indigo-800 underline decoration-2 underline-offset-4"
         >
           {showMoreInfo ? "Ver menos detalles" : "Mostrar más información"}
         </button>
@@ -213,7 +213,7 @@ export default function UserCard({ user }: { user: User }) {
           {user.userPosts.length > 3 && (
             <button
               onClick={() => setShowAllPosts(!showAllPosts)}
-              className="w-full mt-4 py-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-lg transition-colors border border-transparent hover:border-indigo-100"
+              className="w-full mt-4 py-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors border border-transparent hover:border-indigo-100"
             >
               {showAllPosts
                 ? "Ver menos posts"
