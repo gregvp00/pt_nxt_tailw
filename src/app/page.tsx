@@ -72,7 +72,7 @@ export default function Home() {
           className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 disabled:bg-gray-400 transition-all shadow-lg active:scale-95"
         >
           {isPending
-            ? "Sincronizando..."
+            ? "Cargando..."
             : hasLoaded
               ? "Volver a cargar datos"
               : "Cargar datos"}
@@ -86,13 +86,13 @@ export default function Home() {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="black"
                 className="size-5"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
                 />
               </svg>
@@ -100,7 +100,7 @@ export default function Home() {
             <input
               type="text"
               placeholder="Búsqueda rápida"
-              className="text-black block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm transition-shadow"
+              className="text-black block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-gray-100 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm shadow-sm transition-shadow"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -108,7 +108,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {/* FALLBACK BÚSQUEDA */}
         {filteredData.length > 0
           ? filteredData.map((user) => <UserCard key={user.id} user={user} />)

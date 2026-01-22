@@ -41,30 +41,40 @@ export default function UserCard({ user }: { user: User }) {
     ? user.userPosts
     : user.userPosts.slice(0, 3);
   const hiddenPostsCount = user.userPosts.length - 3;
+  // COLORES ALEATORIOS PARA TARJETAS
+  const colors = [
+    "bg-indigo-400/30 text-indigo-200 border-indigo-400/20",
+    "bg-teal-400/30 text-teal-200 border-teal-400/20",
+    "bg-rose-400/30 text-rose-200 border-rose-400/20",
+    "bg-sky-400/30 text-sky-200 border-sky-400/20",
+    "bg-violet-400/30 text-violet-200 border-violet-400/20",
+    "bg-emerald-400/30 text-emerald-200 border-emerald-400/20",
+  ];
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
   // ESTILOS BASE TARJETAS
   const cardClasses =
-    "bg-white border border-gray-200 shadow-md hover:shadow-md transition-shadow overflow-hidden p-6";
+    "bg-[#201d24] shadow-[#302837] shadow-lg transition-shadow overflow-hidden p-6";
 
   return (
     <div className="flex flex-col h-full">
       {/* INFORMACIÓN DEL USUARIO */}
       <div
-        className={`${cardClasses} rounded-t-lg border-b border-dotted border-gray-300`}
+        className={`${cardClasses} ${randomColor} rounded-t-lg border-b border-dotted border-gray-300`}
       >
         <header className="mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
-          <p className="text-indigo-600 font-medium text-sm">
+          <h2 className="text-2xl font-bold text-gray-100">{user.name}</h2>
+          <p className="text-amber-200 font-medium text-sm">
             {user.companyName}
           </p>
         </header>
 
         <div className="space-y-2 text-gray-600 text-sm mb-4">
           <p>
-            <strong className="font-semibold text-gray-900">Email:</strong>{" "}
+            <strong className="font-semibold text-gray-300">Email:</strong>{" "}
             <a
               href={`mailto:${user.email}`}
-              className="text-blue-700 hover:underline hover:text-blue-900 transition-colors"
+              className="text-blue-100 hover:underline hover:text-blue-50 transition-colors"
             >
               {user.email}
             </a>
@@ -72,10 +82,10 @@ export default function UserCard({ user }: { user: User }) {
 
           <div className="flex items-center gap-2">
             <div>
-              <strong className="font-semibold text-gray-900">Teléfono:</strong>{" "}
+              <strong className="font-semibold text-gray-300">Teléfono:</strong>{" "}
               <a
                 href={`tel:${user.phone}`}
-                className="text-blue-700 hover:underline hover:text-blue-900 transition-colors"
+                className="text-blue-100 hover:underline hover:text-blue-50 transition-colors"
               >
                 {user.phone}
               </a>
@@ -85,9 +95,9 @@ export default function UserCard({ user }: { user: User }) {
               <button
                 onClick={handleCopy}
                 title="Copiar extensión teléfonica"
-                className="group ml-2 flex items-center gap-1 border 
-                border-gray-600 bg-green-50 px-2 py-0.5 font-bold text-gray-800 text-xs 
-                hover:bg-green-100 active:scale-95 transition-all rounded"
+                className="group ml-2 flex items-center gap-1 
+                border-gray-600 bg-gray-900 px-2.5 py-1 rounded-xl font-bold text-white text-xs 
+                hover:bg-gray-950 active:scale-95 transition-all"
               >
                 <span>{user.extension}</span>
                 {copied ? (
@@ -108,11 +118,11 @@ export default function UserCard({ user }: { user: User }) {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-3 w-3 text-gray-500 opacity-50 group-hover:opacity-100 transition-opacity"
+                    className="h-3 w-3 text-white opacity-100 group-hover:opacity-100 transition-opacity"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    strokeWidth={2}
+                    strokeWidth={3}
                   >
                     <path
                       strokeLinecap="round"
@@ -127,9 +137,9 @@ export default function UserCard({ user }: { user: User }) {
             )}
           </div>
 
-          <p>
-            <strong className="font-semibold text-gray-900">Ciudad:</strong>{" "}
-            {user.city}
+          <p className="inline-flex gap-1">
+            <strong className="font-semibold text-gray-300">Ciudad:</strong>{" "}
+            <span className=" text-gray-300">{user.city}</span>
           </p>
         </div>
 
@@ -137,9 +147,9 @@ export default function UserCard({ user }: { user: User }) {
         <button
           onClick={() => setShowMoreInfo(!showMoreInfo)}
           aria-expanded={showMoreInfo}
-          className="text-sm font-bold text-gray-800 hover:text-indigo-800 underline decoration-2 underline-offset-4"
+          className="text-sm font-semibold text-amber-50 hover:text-white underline decoration-2 underline-offset-4"
         >
-          {showMoreInfo ? "Ver menos detalles" : "Mostrar más información"}
+          {showMoreInfo ? "Ocultar detalles" : "Mostrar detalles"}
         </button>
 
         {showMoreInfo && (
@@ -198,15 +208,17 @@ export default function UserCard({ user }: { user: User }) {
 
       {/* POSTS DEL USUARIO */}
       <div className={cardClasses}>
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Últimos Posts</h3>
+        <span className="text-lg font-semibold text-gray-100 mb-4">
+          Últimos posts
+        </span>
 
         <ul className="space-y-4">
           {visiblePosts.map((post) => (
             <li
               key={post.id}
-              className="bg-white border-l-4 border-gray-400 pl-3 py-1"
+              className="bg-gray-800 border-l-4 border-gray-400 pl-3 py-1"
             >
-              <h4 className="font-semibold text-gray-800 capitalize leading-snug">
+              <h4 className="font-semibold text-gray-300 capitalize leading-snug">
                 {post.title}
               </h4>
               <p className="text-gray-500 text-xs mt-1">{post.body}</p>
@@ -226,9 +238,7 @@ export default function UserCard({ user }: { user: User }) {
             rounded-lg transition-colors border border-transparent 
             hover:border-indigo-100"
           >
-            {showAllPosts
-              ? "Ver menos posts"
-              : `Ver ${hiddenPostsCount} posts más`}
+            {showAllPosts ? "Ver menos" : `Ver ${hiddenPostsCount} posts más`}
           </button>
         )}
       </div>
